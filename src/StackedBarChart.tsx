@@ -30,6 +30,9 @@ export interface StackedBarChartProps extends AbstractChartProps {
   width: number;
   height: number;
   chartConfig: AbstractChartConfig;
+  getBarColor: (index: number) => string;
+  onClickBar: (index: number) => () => void;
+  minMaxBar: boolean;
   hideLegend: boolean;
   style?: Partial<ViewStyle>;
   barPercentage?: number;
@@ -104,16 +107,23 @@ class StackedBarChart extends AbstractChart<
             barWidth / 2) *
           fac;
 
+        let color = this.props.getBarColor(i) || colors[z];
+
+        if (this.props.minMaxBar && z === 0) {
+          color = "transparent";
+        }
+
         ret.push(
           <Rect
             key={Math.random()}
+            onPress={this.props.onClickBar(i)}
             x={xC}
             y={y}
             rx={this.getBarRadius(ret, x)}
             ry={this.getBarRadius(ret, x)}
             width={barWidth}
             height={h}
-            fill={colors[z]}
+            fill={color}
           />
         );
 
@@ -172,7 +182,7 @@ class StackedBarChart extends AbstractChart<
   render() {
     const paddingTop = 15;
     const paddingRight = 50;
-    const barWidth = 32 * this.getBarPercentage();
+    const barWidth = 32 * this.getBarPercentage() * 0.35;
 
     const {
       width,
