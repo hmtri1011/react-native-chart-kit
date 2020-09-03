@@ -14,6 +14,12 @@ export interface StackedBarChartData {
   barColors: string[];
 }
 
+export interface StackedBarOnClick {
+  index: number;
+  x: number;
+  y: number;
+}
+
 export interface StackedBarChartProps extends AbstractChartProps {
   /**
    * E.g.
@@ -31,7 +37,7 @@ export interface StackedBarChartProps extends AbstractChartProps {
   height: number;
   chartConfig: AbstractChartConfig;
   getBarColor: (index: number) => string;
-  onClickBar: (index: number) => () => void;
+  onClickBar: ({ index, x, y }: StackedBarOnClick) => () => void;
   minMaxBar: boolean;
   hideLegend: boolean;
   style?: Partial<ViewStyle>;
@@ -116,7 +122,7 @@ class StackedBarChart extends AbstractChart<
         ret.push(
           <Rect
             key={Math.random()}
-            onPress={this.props.onClickBar(i)}
+            onPress={this.props.onClickBar({ index: i, x: xC, y: y })}
             x={xC}
             y={y}
             rx={this.getBarRadius(ret, x)}
