@@ -13,6 +13,15 @@ export interface AbstractChartProps {
   xAxisLabel?: string;
   xLabelsOffset?: number;
   hidePointsAtIndex?: number[];
+  renderXLabel?: ({
+    label,
+    x,
+    y
+  }: {
+    label: string;
+    x: number;
+    y: number;
+  }) => React.ReactNode;
 }
 
 export interface AbstractChartConfig extends ChartConfig {
@@ -29,6 +38,15 @@ export interface AbstractChartConfig extends ChartConfig {
   stackedBar?: boolean;
   verticalLabelRotation?: number;
   formatXLabel?: (xLabel: string) => string;
+  renderXLabel?: ({
+    label,
+    x,
+    y
+  }: {
+    label: string;
+    x: number;
+    y: number;
+  }) => React.ReactNode;
 }
 
 export type AbstractChartState = {};
@@ -221,7 +239,8 @@ class AbstractChart<
     horizontalOffset = 0,
     stackedBar = false,
     verticalLabelRotation = 0,
-    formatXLabel = xLabel => xLabel
+    formatXLabel = xLabel => xLabel,
+    renderXLabel
   }: Pick<
     AbstractChartConfig,
     | "labels"
@@ -233,6 +252,7 @@ class AbstractChart<
     | "stackedBar"
     | "verticalLabelRotation"
     | "formatXLabel"
+    | "renderXLabel"
   >) => {
     const {
       xAxisLabel = "",
@@ -271,7 +291,9 @@ class AbstractChart<
           {...this.getPropsForLabels()}
           {...this.getPropsForVerticalLabels()}
         >
-          {`${formatXLabel(label)}${xAxisLabel}`}
+          {renderXLabel
+            ? renderXLabel({ label, x, y })
+            : `${formatXLabel(label)}${xAxisLabel}`}
         </Text>
       );
     });
