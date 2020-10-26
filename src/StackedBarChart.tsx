@@ -57,6 +57,16 @@ export interface StackedBarChartProps extends AbstractChartProps {
   segments?: number;
 
   percentile?: boolean;
+
+  renderXLabel?: ({
+    label,
+    x,
+    y
+  }: {
+    label: string;
+    x: number;
+    y: number;
+  }) => React.ReactNode;
 }
 
 type StackedBarChartState = {};
@@ -199,7 +209,8 @@ class StackedBarChart extends AbstractChart<
       withVerticalLabels = true,
       segments = 4,
       decimalPlaces,
-      percentile = false
+      percentile = false,
+      renderXLabel
     } = this.props;
 
     const { borderRadius = 0 } = style;
@@ -267,7 +278,8 @@ class StackedBarChart extends AbstractChart<
                   paddingRight: paddingRight + 28,
                   stackedBar,
                   paddingTop,
-                  horizontalOffset: barWidth
+                  horizontalOffset: barWidth,
+                  renderXLabel
                 })
               : null}
           </G>

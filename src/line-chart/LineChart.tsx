@@ -213,6 +213,18 @@ export interface LineChartProps extends AbstractChartProps {
    * The number of horizontal lines
    */
   segments?: number;
+  /**
+   * custom function to render xLabel
+   */
+  renderXLabel?: ({
+    label,
+    x,
+    y
+  }: {
+    label: string;
+    x: number;
+    y: number;
+  }) => React.ReactNode;
 }
 
 type LineChartState = {
@@ -805,7 +817,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       formatXLabel = xLabel => xLabel,
       segments,
       transparent = false,
-      chartConfig
+      chartConfig,
+      renderXLabel
     } = this.props;
 
     const { scrollableDotHorizontalOffset } = this.state;
@@ -910,7 +923,8 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
                   labels,
                   paddingTop: paddingTop as number,
                   paddingRight: paddingRight as number,
-                  formatXLabel
+                  formatXLabel,
+                  renderXLabel
                 })}
             </G>
             <G>
